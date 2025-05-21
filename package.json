@@ -1,0 +1,25 @@
+{
+  "name": "RefactorToToWeb",
+  "version": "1.0.0",
+  "main": "src/js/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "cannon-es": "^0.20.0",
+    "cannon-es-debugger": "^1.0.0",
+    "gsap": "^3.12.7",
+    "lil-gui": "^0.20.0",
+    "normalize.css": "^8.0.1",
+    "three": "^0.176.0",
+    "three-custom-shader-material": "^6.3.5"
+  },
+  "devDependencies": {
+    "vite": "^6.3.4",
+    "vite-plugin-glsl": "^1.4.1"
+  }
+}
