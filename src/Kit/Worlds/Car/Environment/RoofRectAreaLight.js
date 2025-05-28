@@ -1,0 +1,85 @@
+import * as THREE from "three";
+import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
+
+
+export default class RoofRectAreaLight {
+
+    constructor(context) {
+        this.name = 'RoofRectAreaLight';
+        this.cnName = '汽车顶光';
+        this.context = context;
+        this.scene = context.getScene();
+        this.debug = context.getDebug();
+        this.resources = context.getResources();
+
+        this.logger = context.getLogger(`${this.cnName}: ${this.name}`);
+        this.logger.important('初始化完成');
+
+        RectAreaLightUniformsLib.init();
+        this.setLight();
+
+        if (this.debug.active) {
+            this._setDebugger();
+        }
+    }
+
+    setLight() {
+        const width = 0.5;
+        const height = 1.2;
+        const intensity = 4;
+        const y = 0.5;
+        const directionToDown = -Math.PI / 2;  // 让光朝下（默认朝-z方向）
+        this.light = new THREE.RectAreaLight( 0xffffff, intensity,  width, height );
+        this.light.position.y = y;
+        this.light.lookAt( 0, 0, 0 );
+
+        this.light.rotation.x = directionToDown;
+
+        const planeGeometry = new THREE.PlaneGeometry(width, height, 1, 1);
+        const material = new THREE.MeshPhysicalMaterial({
+            color: 0xffffff,
+            emissive: 0xffffff,
+            map: this.resources.items.startroomLightTexture,
+            emissiveIntensity: 5,
+            roughness: 0.1,
+            metalness: 0.5,
+            side: THREE.DoubleSide
+        });
+
+        this.lightPlane = new THREE.Mesh(planeGeometry, material);
+        this.lightPlane.position.y = y;
+        this.lightPlane.rotation.x = directionToDown; // 让光朝下（默认朝-z方向）
+
+        this.scene.add(this.light);
+        this.scene.add(this.lightPlane);
+
+    }
+
+
+    _setDebugger() {
+        this.folder = this.debug.ui.addFolder('汽车顶光');
+        this.folder.addColor(this.light, 'color').name('灯光颜色');
+        this.folder.add(this.light, 'intensity').min(0.0).max(20).step(0.1).name('光照强度(Intensity)');
+        this.folder.add(this.light.position, 'x').min(-3).max(3).step(0.01).name('X').onChange(value => {
+            this.lightPlane.position.x = value - 0.02;
+        });
+        this.folder.add(this.light.position, 'y').min(0).max(10).step(0.01).name('Y').onChange(value => {
+            this.lightPlane.position.y = value - 0.02;
+        });
+        this.folder.add(this.light.position, 'z').min(-3).max(3).step(0.01).name('Z').onChange(value => {
+            this.lightPlane.position.z = value - 0.02;
+        });
+    }
+
+    destroy() {
+        this.scene.remove(this.light);
+        this.light = null;
+
+        if (this.folder?.destroy) {
+            this.folder.destroy();
+        }
+    }
+
+
+
+}

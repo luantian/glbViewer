@@ -1,14 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>RefactorToToWeb</title>
-    <link rel="stylesheet" href="src/css/index.css">
-    <script type="module" src="src/js/index.js"></script>
-  </head>
-  <body>
-    <canvas id="canvas" class="webgl"></canvas>
-  </body>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToTo</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <div id="root">
+        <div class="webgl-wrapper">
+            <canvas class="webgl"></canvas>
+        </div>
+    </div>
+    <!--    <div style="position: fixed; top: 10px; left: 10px; z-index: 100">-->
+    <!--      <button class="btn1">切换fox</button>-->
+    <!--      <button class="btn2">切换car</button>-->
+    <!--      <button class="btn3">切换boiler</button>-->
+    <!--    </div>-->
+
+    <div class="loading-wrapper">
+        <div class="loading">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="loading-value"></div>
+    </div>
+    <script type="module" src="./src/main.js"></script>
+</body>
 </html>
