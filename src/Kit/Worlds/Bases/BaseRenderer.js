@@ -16,6 +16,7 @@ export default class BaseRenderer
 
         this.instance = null;   // 子类必须实现初始化
 
+
     }
 
     resize()

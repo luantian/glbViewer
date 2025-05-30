@@ -46,7 +46,7 @@ export default class EnvironmentMap {
     }
 
     setDebugger() {
-        this.folder = this.debug.ui.addFolder('Environment Map');
+        this.folder = this.debug.ui.addFolder('EnvironmentManager Map');
         this.folder.add(this.environmentMap, 'intensity')
             .min(0).max(4).step(0.001)
             .name('Env Map Intensity')

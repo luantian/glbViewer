@@ -1,5 +1,10 @@
 import * as THREE from 'three'
 import EventEmitter from './EventEmitter.js'
+import Stats from 'stats.js'
+
+var stats = new Stats();
+stats.showPanel( 1 ); // 0: fps, 1: ms, 2: mb, 3+: custom
+document.body.appendChild( stats.dom );
 
 export default class Time extends EventEmitter {
     constructor() {
@@ -23,12 +28,17 @@ export default class Time extends EventEmitter {
     }
 
     tick() {
+        stats.begin();
+
         if (!this.isRunning) return
+
 
         this.delta = this.clock.getDelta();
         this.elapsed = this.clock.elapsedTime
 
-        this.trigger('tick')
+        this.trigger('tick', this.delta, this.elapsed)
+
+        stats.end();
 
         this.rafId = window.requestAnimationFrame(this.tick)
     }

@@ -65,6 +65,7 @@ export default class Floor {
         });
 
         this.floor = new THREE.Mesh(floorPlane, this.floorMaterial);
+        this.floor.name = this.name;
         this.floor.position.set(0, -0.153, 0);
         this.floor.rotation.x = -Math.PI / 2;
 
@@ -134,5 +135,9 @@ export default class Floor {
         this.reflectorFolder.add(this.reflectorFloor.position, 'z').min(-3).max(3).step(0.001).name('Z');*/
 
         // this.folder.add(this.reflectorOptions, 'clipBias').min(-10).max(10).step(0.01).name('clipBias');
+    }
+
+    destroy() {
+
     }
 }

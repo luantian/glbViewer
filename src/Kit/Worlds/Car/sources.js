@@ -37,11 +37,15 @@ export default [
         type: 'texture',
         path: '/textures/car/t_floor_roughness.webp'
     },
-
+    {
+        name: 'flyLightTexture',
+        type: 'texture',
+        path: '/textures/car/flyLight.png'
+    },
     {
         name: 'carModel',
         type: 'gltfModel',
-        path: '/models/Car/2018_bmw_m5.glb'
+        path: '/models/Car/2018_bmw_m5_4.glb'
     },
 
 ]

@@ -17,14 +17,9 @@ export default class ColorPicker {
             'rgba(255, 71, 0, 1)', 'rgba(0, 159, 254, 1)', 'rgba(6, 76, 153, 1)', 'rgba(30, 30, 30, 1)'
         ]
 
-        // this.colors = [
-        //     'rgba(248, 248, 246, 0.98)', 'rgba(15, 15, 15, 0.95)', 'rgba(0, 120, 215, 0.9)', 'rgba(80, 80, 80, 0.6)', 'rgba(180, 10, 30, 0.97)',
-        //     'rgba(140, 220, 190, 0.85)', 'rgba(170, 150, 110, 0.92)', 'rgba(200, 210, 215, 0.9)'
-        // ]
-
         this.disColorPartNames = [
             'Object_301', 'Object_202', 'Object_217', 'Object_124', 'Object_241', 'Object_85', 'Object_142', 'Object_151', 'Object_184', 'Object_172',
-            'Object_175', 'Object_244',
+            'Object_367'
         ];  // 需要手动添加了
 
         this.disColorParts = [];
@@ -72,10 +67,11 @@ export default class ColorPicker {
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                transition: .4s;
             }
             
             .__color-picker-wrap .__colors {
-                height: 2.8rem;
+                // height: 2.8rem;
                 display: flex;
                 background-color: #ccc3;
                 border-radius: 1.5rem;
@@ -108,12 +104,12 @@ export default class ColorPicker {
     }
 
     _bindEvent() {
-        const colorsEl = document.querySelector('.__colors');
-
-        window.addEventListener('click', this._onClickColor.bind(this));
+        this.colorsEl = document.querySelector('.__colors');
+        this.colorsEl.addEventListener('pointerdown', this._onClickColor.bind(this));
     }
 
     _onClickColor(e) {
+        e.stopPropagation()
 
         const act = e.target.dataset.act;
 
@@ -170,8 +166,8 @@ export default class ColorPicker {
     }
 
     destroy() {
-        window.removeEventListener('click', this._onClickColor.bind(this));
-        document.querySelector('__color-picker-wrap').innerHTML = '';
+        this.colorsEl.removeEventListener('pointerdown', this._onClickColor.bind(this));
+        this.colorsEl.innerHTML = '';
     }
 
 }

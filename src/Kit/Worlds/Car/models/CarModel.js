@@ -6,5 +6,11 @@ export default class CarModel extends BaseModel {
             name: 'carModel',
             isAutoAddScene: true
         });
+
+        this.setAnimation();
+
+        this.convertPhysicalToStandardMaterial();
+
     }
+
 }

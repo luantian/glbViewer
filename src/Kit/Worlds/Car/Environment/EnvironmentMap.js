@@ -26,8 +26,6 @@ export default class EnvironmentMap {
             texture: this.resources.items.environmentMapTexture
         };
 
-        
-
         this.environmentMap.texture.colorSpace = THREE.SRGBColorSpace;
 
         // 设置场景环境贴图（物理环境光影响）
@@ -54,7 +52,7 @@ export default class EnvironmentMap {
     }
 
     setDebugger() {
-        const folder = this.debug.ui.addFolder('Environment Map');
+        const folder = this.debug.ui.addFolder('EnvironmentManager Map');
         folder.add(this.environmentMap, 'intensity')
             .min(0).max(4).step(0.001)
             .name('Env Map Intensity')

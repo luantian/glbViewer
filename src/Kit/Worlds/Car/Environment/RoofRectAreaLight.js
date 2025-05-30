@@ -15,6 +15,7 @@ export default class RoofRectAreaLight {
         this.logger = context.getLogger(`${this.cnName}: ${this.name}`);
         this.logger.important('初始化完成');
 
+
         RectAreaLightUniformsLib.init();
         this.setLight();
 
@@ -30,23 +31,28 @@ export default class RoofRectAreaLight {
         const y = 0.5;
         const directionToDown = -Math.PI / 2;  // 让光朝下（默认朝-z方向）
         this.light = new THREE.RectAreaLight( 0xffffff, intensity,  width, height );
+        this.light.name = this.name;
         this.light.position.y = y;
         this.light.lookAt( 0, 0, 0 );
 
         this.light.rotation.x = directionToDown;
 
-        const planeGeometry = new THREE.PlaneGeometry(width, height, 1, 1);
-        const material = new THREE.MeshPhysicalMaterial({
-            color: 0xffffff,
+        this.planeGeometry = new THREE.PlaneGeometry(width, height, 1, 1);
+/*        this.lightTexture = this.resources.items.startroomLightTexture.clone();
+        this.lightTexture.offset.set(0.87, 0.278);
+        this.lightTexture.repeat.set(0.124, 0.27);*/
+
+        this.material = new THREE.MeshStandardMaterial({
             emissive: 0xffffff,
-            map: this.resources.items.startroomLightTexture,
+            // alphaMap: this.lightTexture,
             emissiveIntensity: 5,
             roughness: 0.1,
             metalness: 0.5,
             side: THREE.DoubleSide
         });
 
-        this.lightPlane = new THREE.Mesh(planeGeometry, material);
+        this.lightPlane = new THREE.Mesh(this.planeGeometry, this.material);
+        this.lightPlane.name = this.name + 'Plane'
         this.lightPlane.position.y = y;
         this.lightPlane.rotation.x = directionToDown; // 让光朝下（默认朝-z方向）
 
@@ -69,6 +75,13 @@ export default class RoofRectAreaLight {
         this.folder.add(this.light.position, 'z').min(-3).max(3).step(0.01).name('Z').onChange(value => {
             this.lightPlane.position.z = value - 0.02;
         });
+
+        /*this.planeFolder = this.folder.addFolder('汽车顶光白板');
+        this.planeFolder.add(this.lightTexture.offset, 'x').min(-10).max(10).step(0.001).name('offsetX');
+        this.planeFolder.add(this.lightTexture.offset, 'y').min(-10).max(10).step(0.001).name('offsetY');
+        this.planeFolder.add(this.lightTexture.repeat, 'x').min(-10).max(10).step(0.001).name('repeatX');
+        this.planeFolder.add(this.lightTexture.repeat, 'y').min(-10).max(10).step(0.001).name('repeatY');*/
+
     }
 
     destroy() {

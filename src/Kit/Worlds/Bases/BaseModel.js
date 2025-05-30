@@ -39,9 +39,10 @@ export default class BaseModel {
 
         this.model = this.resource.scene;
 
-        this.traverseModel();
+        console.log(this.model)
+
+        // this.traverseModel();
         this._setScaleAndCenter();
-        this._setAnimation();
         if (this.config.isAutoAddScene) {
             this.scene.add(this.model);
         }
@@ -90,7 +91,36 @@ export default class BaseModel {
         this.model.position.sub(center);
     }
 
-    _setAnimation() {
+    /*
+    * 材质转换
+    * */
+    convertPhysicalToStandardMaterial() {
+        this.model.traverse((child) => {
+            if (child.isMesh && child.material) {
+                let mat = child.material;
+
+                // 如果是 PhysicalMaterial，就换掉
+                if (mat.isMeshPhysicalMaterial) {
+                    const newMat = new THREE.MeshStandardMaterial({
+                        color: mat.color,
+                        map: mat.map || null,
+                        normalMap: mat.normalMap || null,
+                        metalness: mat.metalness ?? 0.5,
+                        roughness: mat.roughness ?? 0.5,
+                        transparent: mat.transparent,
+                        opacity: mat.opacity,
+                        envMap: mat.envMap || null,
+                        side: mat.side || THREE.FrontSide,
+                    });
+
+                    child.material.dispose(); // 记得释放旧材质
+                    child.material = newMat;
+                }
+            }
+        });
+    }
+
+    setAnimation() {
         this.animation = new Animation(this.resource);
 
         // 优先使用配置的默认动画，否则使用第一个动画
@@ -101,11 +131,12 @@ export default class BaseModel {
     }
 
     _setDebugger() {
-        if (this.animation.getCount() > 0) {
+        if (this.animation && this.animation.getCount() > 0) {
             const folder = this.debug.ui.addFolder(this.config.name);
             this.animation.setDebugger(folder);
         }
     }
+
 
     update() {
         if (this.animation) {

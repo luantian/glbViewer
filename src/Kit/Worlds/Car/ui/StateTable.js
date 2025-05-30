@@ -24,7 +24,6 @@ export default class StateTable {
 
         this._setStateTableStyle();
         this._setStateTable();
-        this.stateEls = document.querySelectorAll('.__item');
         this._setState();
         this._bindEvent();
         this._initScrollHandler();
@@ -59,7 +58,7 @@ export default class StateTable {
 
     _setStateTable() {
         const el = document.createElement("div");
-        el.setAttribute("class", "__StateTable-container");
+        el.setAttribute("class", "__stateTable-container");
 
 
         let stateStr = '';
@@ -75,16 +74,19 @@ export default class StateTable {
             `;
         })
 
-        el.innerHTML = `<div class="__StateTable-content"><div class="__backgroundLine"></div>${ stateStr }</div>`
+        el.innerHTML = `<div class="__stateTable-content"><div class="__backgroundLine"></div>${ stateStr }</div>`
 
         document.querySelector('#root').appendChild(el);
+        this.stateEls = document.querySelectorAll('.__item');
     }
 
     _bindEvent() {
-        window.addEventListener('click', this._onClickState.bind(this));
+        this.stateTableEl = document.querySelector('.__stateTable-container');
+        this.stateTableEl.addEventListener('pointerdown', this._onClickState.bind(this));
     }
 
     _onClickState(e) {
+        e.stopPropagation();
         const act = e.target.dataset.act;
         if (act === this.act) {
             this.activeStateIndex = Number(e.target.dataset.index);
@@ -97,6 +99,7 @@ export default class StateTable {
         this.stateEls.forEach(item => {
             item.removeAttribute('style');
             item.querySelector('.__item-Line').style.opacity = "0";
+            item.querySelector('.__tableName').removeAttribute('style');
         })
         this._setState();
     }
@@ -106,40 +109,45 @@ export default class StateTable {
     }
 
     _setState() {
-        this.stateEls[this.activeStateIndex].style.backgroundColor = this.activeStateColor;
-        this.stateEls[this.activeStateIndex].querySelector('.__item-Line').style.opacity = 1;
+        const item = this.stateEls[this.activeStateIndex];
+        item.style.backgroundColor = this.activeStateColor;
+        item.style.color = this.activeStateColor;
+        item.querySelector('.__item-Line').style.opacity = 1;
+        item.querySelector('.__tableName').style.color = this.activeStateColor;
+        item.querySelector('.__tableName').style.fontSize = '0.9rem';
     }
 
     _setStateTableStyle() {
-        if (document.getElementById('__StateTable-container')) return;
+        if (document.querySelector('#__stateTable-container')) return;
         const styleEl = document.createElement('style');
-        styleEl.id = '__StateTable-container-ui-style';
+        styleEl.id = '__stateTable-container-ui-style';
         styleEl.textContent = `
-            .__StateTable-container {
+            .__stateTable-container {
                 position: absolute;
                 top: 25vmin;
                 right: 0%;
                 height: 50vmin;
                 width: 3rem;
-                margin: 0vmin 2% 0% 0%;
+                margin: 0 2% 0% 0%;
                 justify-content: center;
                 display: flex;
                 align-items: center;
+                transition: .2s;
             }
-            .__StateTable-container .__StateTable-content {
+            .__stateTable-container .__stateTable-content {
                 position: relative;
                 height: 100%;
                 display: flex;
                 flex-direction: column;
                 justify-content: space-evenly;
             }
-            .__StateTable-container .__StateTable-content .__backgroundLine {
+            .__stateTable-container .__stateTable-content .__backgroundLine {
                 position: absolute;
                 height: 100%;
                 width: 1px;
                 background-color: #ffffffa0;
             }
-            .__StateTable-container .__StateTable-content .__item {
+            .__stateTable-container .__stateTable-content .__item {
                 position: relative;
                 right: calc(.25rem - .5px);
                 width: .5rem;
@@ -147,7 +155,7 @@ export default class StateTable {
                 border-radius: 50%;
                 background-color: #fff;
             }
-            .__StateTable-container .__StateTable-content .__item .__tableName {
+            .__stateTable-container .__stateTable-content .__item .__tableName {
                 -webkit-user-select: none;
                 user-select: none;
                 position: relative;
@@ -159,14 +167,12 @@ export default class StateTable {
                 display: flex;
                 flex-direction: row-reverse;
                 align-items: center;
-            }
-            
-            .__StateTable-container .__StateTable-content .__item .__tableName div {
                 font-size: .7rem;
                 white-space: nowrap;
                 transition: all .3s;
             }
-            .__StateTable-container .__StateTable-content .__item .__clickBox {
+            
+            .__stateTable-container .__stateTable-content .__item .__clickBox {
                 cursor: pointer;
                 position: absolute;
                 top: -1.25rem;
@@ -175,7 +181,7 @@ export default class StateTable {
                 width: 5rem;
             }
             
-            .__StateTable-container .__StateTable-content .__item .__item-Line {
+            .__stateTable-container .__stateTable-content .__item .__item-Line {
                 content: "";
                 position: absolute;
                 top: -3px;
@@ -188,6 +194,11 @@ export default class StateTable {
             }
         `;
         document.head.appendChild(styleEl);
+    }
+
+    destroy() {
+        this.stateTableEl.removeEventListener('pointerdown', this._onClickState.bind(this));
+        this.stateTableEl.innerHTML = '';
     }
 }
 

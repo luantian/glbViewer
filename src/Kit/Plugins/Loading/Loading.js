@@ -9,11 +9,11 @@ export default class Loading {
 
         this.scene = context.getScene();
         this.sizes = context.getSizes();
+        this.time = context.getTime();
         this.logger = context.getLogger(`${this.cnName}: ${this.name}`);
         this.logger.info('开始实例化')
 
         this._loadingEl = null;
-        this._timer = null;
 
         this.controls = context.getOrbitControls();
         this.controls.enabled = false;
@@ -43,12 +43,10 @@ export default class Loading {
 
         this.scene.add(this.plane);
 
-        this._timer = setInterval(() => {
+        this.time.on('tick', () => {
             this.material.uniforms.uTime.value += 0.001;
-        }, 1 / 120)
-
+        });
         this._getLoadingElement();
-
     }
 
     _getLoadingElement() {
@@ -72,11 +70,10 @@ export default class Loading {
         // this.material.uniforms.uTime.value = value;
         if (this._loadingEl) {
             this._loadingEl.innerHTML = str;
-            if (value == 1) {
+            if (value === 1) {
                 setTimeout(() => {
                     this._loadingEl.innerHTML = '';
                     this._loadingEl = null;
-                    clearInterval(this._timer);
                 }, 10000)
             }
         }

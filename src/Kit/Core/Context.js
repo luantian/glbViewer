@@ -64,14 +64,6 @@ export default class Context {
         return this.pluginManager;
     }
 
-    getUiManager() {
-        return this.uiManager;
-    }
-
-    setUiManager(manager) {
-        this.uiManager = manager;
-    }
-
     getCamera() { return this.camera; }
     setCamera(camera) { this.camera = camera; }
 

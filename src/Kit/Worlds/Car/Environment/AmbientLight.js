@@ -28,4 +28,13 @@ export default class AmbientLight {
     _setDebugger() {
 
     }
+
+    destroy() {
+
+        if (this.light) {
+            this.scene.remove(this.light);
+            this.light.dispose();
+            this.light = null;
+        }
+    }
 }
