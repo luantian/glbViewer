@@ -1,5 +1,7 @@
 import * as THREE from "three";
+import gsap from "gsap";
 import { Reflector } from 'three/examples/jsm/objects/Reflector.js';
+import MeshReflectorMaterial from '../../../Utils/MeshReflectorMaterial.js'
 
 export default class Floor {
 
@@ -11,15 +13,51 @@ export default class Floor {
         this.sizes = context.getSizes();
         this.debug = context.getDebug();
         this.resources = context.getResources();
+        this.rendererInstance = context.getRendererInstance();
+        this.cameraInstance = context.getCameraInstance();
 
         this.logger = context.getLogger(`${this.cnName}: ${this.name}`);
         this.logger.important('初始化完成');
 
+        this.tween = null;
+
         this._setFloor();
         // this._setReflector();
+        // this._setReflectorFloor();
+
+
         if (this.debug.active) {
             this._setDebugger();
         }
+
+    }
+
+    _setReflectorFloor() {
+        this.plane = new THREE.Mesh(new THREE.PlaneGeometry(10, 10))
+        this.plane.position.y = -0.154
+        this. plane.rotation.x = -Math.PI / 2
+        this.reflectorFloorParams = {
+            blur: [512, 512],         // 高强度模糊
+            mixBlur: 1,               // 完全模糊混合
+            resolution: 1024,         // 中等清晰度
+            depthScale: 1,            // 启用深度模糊
+            minDepthThreshold: 0.9,   // 深度范围配置
+            maxDepthThreshold: 1,
+            depthToBlurRatioBias: 0.25,
+            mirror: 1,
+            mixStrength: 1,
+            color: 0x888888
+        }
+
+        this.plane.material = new MeshReflectorMaterial(this.rendererInstance, this.cameraInstance, this.scene, this.plane, this.reflectorFloorParams);
+
+        this.plane.material.setValues({
+            roughnessMap: this.resources.items.glassRoughnessTexture,
+            normalMap: this.resources.items.glassNormalTexture,
+            normalScale: new THREE.Vector2(0.3, 0.3)
+        })
+
+        this.scene.add(this.plane)
 
     }
 
@@ -50,7 +88,7 @@ export default class Floor {
             emissive: 0x000000,
             map: this.floorMapTexture,
             aoMap: this.floorAoMapTexture,
-            alphaMap: this.floorAoMapTexture,
+            // alphaMap: this.floorAoMapTexture,
             normalMap: this.floorNormalTexture,
             // roughnessMap: this.floorRoughnessTexture,
             roughness: 0.53,
@@ -74,13 +112,14 @@ export default class Floor {
 
     _setReflector() {
 
-        const floorPlane = new THREE.PlaneGeometry(6, 6);
+        const floorPlane = new THREE.PlaneGeometry(4, 4);
         this.reflectorOptions = {
             clipBias: 0.003,
             textureWidth: this.sizes.width * this.sizes.pixelRatio * 0.5,
             textureHeight: this.sizes.height * this.sizes.pixelRatio * 0.5,
             // side: THREE.DoubleSide,
         }
+
 
         this.reflectorFloor = new Reflector(floorPlane, this.reflectorOptions);
         this.reflectorFloor.position.set(0, -0.154, 0);
@@ -92,7 +131,30 @@ export default class Floor {
     _setDebugger() {
         this.folder = this.debug.ui.addFolder(this.cnName);
 
-        this.ordinaryFolder = this.folder.addFolder('常规地板');
+   /*     resolution: 1024,
+            blur: [512, 128],
+            mixBlur: 2.5,
+            mixContrast: 1.5,
+            mirror: 1*/
+
+/*
+        this.folder.add(this.reflectorFloorParams, 'resolution').min(0).max(2048).step(1).name('resolution').onChange(() => {
+            this.plane.material.update()
+        });
+        this.folder.add(this.reflectorFloorParams, 'mixBlur').min(0).max(10).step(0.01).name('mixBlur').onChange(() => {
+            this.plane.material.update()
+        });
+        this.folder.add(this.reflectorFloorParams, 'mixContrast').min(0).max(10).step(0.01).name('mixContrast').onChange(() => {
+            this.plane.material.update()
+        });
+        this.folder.add(this.reflectorFloorParams, 'mirror').min(0).max(10).step(0.01).name('mirror').onChange(() => {
+            this.plane.material.update()
+        });
+*/
+
+
+
+        /*this.ordinaryFolder = this.folder.addFolder('常规地板');
         this.ordinaryFolder.add(this.floor.position, 'x').min(-3).max(3).step(0.001).name('X');
         this.ordinaryFolder.add(this.floor.position, 'y').min(-3).max(3).step(0.001).name('Y');
         this.ordinaryFolder.add(this.floor.position, 'z').min(-3).max(3).step(0.001).name('Z');
@@ -124,17 +186,32 @@ export default class Floor {
             this.floorNormalTexture.offset.y = value;
         })
         this.textureFolder.add(this.floorMapTexture, 'rotation').min(0).max(360).step(0.01).name('旋转(rotation)')
-        // this.textureFolder.add(this.floorStartroomLightTexture.rotation, 'y').min(0).max(Math.PI * 2).step(0.01).name('rotationY');
 
 
-
-
-        /*this.reflectorFolder = this.folder.addFolder('reflectorFloor地板');
+        this.reflectorFolder = this.folder.addFolder('reflectorFloor地板');
         this.reflectorFolder.add(this.reflectorFloor.position, 'x').min(-3).max(3).step(0.001).name('X');
         this.reflectorFolder.add(this.reflectorFloor.position, 'y').min(-3).max(3).step(0.001).name('Y');
         this.reflectorFolder.add(this.reflectorFloor.position, 'z').min(-3).max(3).step(0.001).name('Z');*/
 
         // this.folder.add(this.reflectorOptions, 'clipBias').min(-10).max(10).step(0.01).name('clipBias');
+    }
+
+    show() {
+        if (this.tween) { this.tween.kill() }
+        // this.tween = gsap.to(this.floorMaterial, {
+        //     opacity: 1,
+        //     duration: 3,
+        //     ease: "power4.out",
+        // })
+    }
+
+    hide() {
+        if (this.tween) { this.tween.kill() }
+        // this.tween = gsap.to(this.floorMaterial, {
+        //     opacity: 0,
+        //     duration: 3,
+        //     ease: "power2.in",
+        // })
     }
 
     destroy() {

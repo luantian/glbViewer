@@ -15,6 +15,7 @@
     "gsap": "^3.12.7",
     "lil-gui": "^0.20.0",
     "normalize.css": "^8.0.1",
+    "postprocessing": "^6.37.3",
     "stats.js": "^0.17.0",
     "three": "^0.176.0",
     "three-custom-shader-material": "^6.3.5"

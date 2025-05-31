@@ -5,9 +5,11 @@ import Debug from './Debug.js';
 import Resources from './Resources.js';
 import Logger from '../Plugins/Logger.js';
 import PluginManager from '../Plugins/PluginManager.js';
+import EventEmitter from "./EventEmitter.js";
 
-export default class Context {
+export default class Context extends EventEmitter {
     constructor({ canvas }) {
+        super();
         this.name = 'Context';
         this.cnName = '全局上下文';
 

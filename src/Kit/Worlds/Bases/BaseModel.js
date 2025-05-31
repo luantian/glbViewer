@@ -39,8 +39,6 @@ export default class BaseModel {
 
         this.model = this.resource.scene;
 
-        console.log(this.model)
-
         // this.traverseModel();
         this._setScaleAndCenter();
         if (this.config.isAutoAddScene) {
@@ -94,7 +92,7 @@ export default class BaseModel {
     /*
     * 材质转换
     * */
-    convertPhysicalToStandardMaterial() {
+    convertPhysicalToStandardMaterial(options = {}) {
         this.model.traverse((child) => {
             if (child.isMesh && child.material) {
                 let mat = child.material;
@@ -109,7 +107,7 @@ export default class BaseModel {
                         roughness: mat.roughness ?? 0.5,
                         transparent: mat.transparent,
                         opacity: mat.opacity,
-                        envMap: mat.envMap || null,
+                        envMap: options.envMap || mat.envMap || null,
                         side: mat.side || THREE.FrontSide,
                     });
 

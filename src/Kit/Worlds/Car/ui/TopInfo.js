@@ -10,6 +10,14 @@ export default class TopInfo {
         this._setTopInfoStyle();
     }
 
+    show() {
+        this.topInfoEl.setAttribute("__hide", "1");
+    }
+
+    hide() {
+        this.topInfoEl.removeAttribute("__hide");
+    }
+
     _setTopInfo() {
         const el = document.createElement("div");
         el.setAttribute("class", "__top-info-wrap");
@@ -27,6 +35,7 @@ export default class TopInfo {
             </div>
         `;
         document.querySelector('#root').appendChild(el);
+        this.topInfoEl = el;
     }
 
     _setTopInfoStyle() {
@@ -40,7 +49,12 @@ export default class TopInfo {
                 right: 0;
                 top: 0;
                 transition: 0.2s 0.3s;
+                opacity: 1;
                 pointer-events: none;
+            }
+            
+            .__top-info-wrap[__hide] {
+                opacity: 0;
             }
             
             .__top-info-content {

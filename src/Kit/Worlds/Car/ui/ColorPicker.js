@@ -17,12 +17,7 @@ export default class ColorPicker {
             'rgba(255, 71, 0, 1)', 'rgba(0, 159, 254, 1)', 'rgba(6, 76, 153, 1)', 'rgba(30, 30, 30, 1)'
         ]
 
-        this.disColorPartNames = [
-            'Object_301', 'Object_202', 'Object_217', 'Object_124', 'Object_241', 'Object_85', 'Object_142', 'Object_151', 'Object_184', 'Object_172',
-            'Object_367'
-        ];  // 需要手动添加了
 
-        this.disColorParts = [];
 
         this.itemLineStr = '<div class="__color-item-line"></div>'
         this.act = "ColorPickerClick";
@@ -30,10 +25,17 @@ export default class ColorPicker {
 
         this._setColorPickerStyle();
         this._setColorPicker();
-        this._queryDisColorParts();
         this._setInitColor();
         this._bindEvent();
 
+    }
+
+    show() {
+        this.colorsEl.setAttribute("__hide", "1");
+    }
+
+    hide() {
+        this.colorsEl.removeAttribute("__hide");
     }
 
     _setColorPicker() {
@@ -67,7 +69,11 @@ export default class ColorPicker {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                transition: .4s;
+                transition: .6s;
+            }
+            
+            .__color-picker-wrap[__hide] {
+                bottom: -6rem;
             }
             
             .__color-picker-wrap .__colors {
@@ -104,7 +110,7 @@ export default class ColorPicker {
     }
 
     _bindEvent() {
-        this.colorsEl = document.querySelector('.__colors');
+        this.colorsEl = document.querySelector('.__color-picker-wrap');
         this.colorsEl.addEventListener('pointerdown', this._onClickColor.bind(this));
     }
 
@@ -120,40 +126,14 @@ export default class ColorPicker {
             })
             this.currentColor = color;
             e.target.innerHTML = this.itemLineStr;
-            this._onSetCarModelColor(this.currentColor);
+            this.context.trigger('ColorPickerSelect', this._reversergbaToColor(this.currentColor));
         }
     }
 
-    _queryDisColorParts() {
-        const carModel = this.resources.items.carModel;
-        this.looger.important('carModel', carModel)
-        carModel.scene.traverse((child) => {
-            if (child instanceof THREE.Mesh) {
-                if (this.disColorPartNames.includes(child.name)) {
-                    this.disColorParts.push(child);
-                }
-            }
-        });
-    }
 
-    _onSetCarModelColor(color) {
-        this.looger.important('改变模型颜色', color);
-        this.disColorParts.forEach(item => {
-            const targetColor = this._reversergbaToColor(color);
-            item.material.metalness = 0.1;
-            // 动画过渡颜色
-            gsap.to(item.material.color, {
-                r: targetColor.r,
-                g: targetColor.g,
-                b: targetColor.b,
-                duration: 0.4
-            });
-        })
-    }
 
     _setInitColor() {
         if (this.colors.length > 0) {
-            this._onSetCarModelColor(this.currentColor);
             document.querySelector('.__color-item').innerHTML = this.itemLineStr;
         }
     }

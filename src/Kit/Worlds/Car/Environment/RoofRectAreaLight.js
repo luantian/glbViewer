@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
+import gsap from "gsap";
 
 
 export default class RoofRectAreaLight {
@@ -15,6 +16,15 @@ export default class RoofRectAreaLight {
         this.logger = context.getLogger(`${this.cnName}: ${this.name}`);
         this.logger.important('初始化完成');
 
+        this._zoomInOptions = {
+            duration: 1.2,
+            ease: "power2.out",
+        }
+        this._zoomOutOptions = {
+            duration: 1.2,
+            ease: "power2.out",
+        }
+
 
         RectAreaLightUniformsLib.init();
         this.setLight();
@@ -27,27 +37,28 @@ export default class RoofRectAreaLight {
     setLight() {
         const width = 0.5;
         const height = 1.2;
-        const intensity = 4;
+        this.intensity = 4;
         const y = 0.5;
         const directionToDown = -Math.PI / 2;  // 让光朝下（默认朝-z方向）
-        this.light = new THREE.RectAreaLight( 0xffffff, intensity,  width, height );
+        this.light = new THREE.RectAreaLight( 0xffffff, this.intensity,  width, height );
         this.light.name = this.name;
         this.light.position.y = y;
         this.light.lookAt( 0, 0, 0 );
 
         this.light.rotation.x = directionToDown;
 
+        this._zoomTween = null;
+
         this.planeGeometry = new THREE.PlaneGeometry(width, height, 1, 1);
-/*        this.lightTexture = this.resources.items.startroomLightTexture.clone();
-        this.lightTexture.offset.set(0.87, 0.278);
-        this.lightTexture.repeat.set(0.124, 0.27);*/
 
         this.material = new THREE.MeshStandardMaterial({
+            color: 'red',
             emissive: 0xffffff,
             // alphaMap: this.lightTexture,
             emissiveIntensity: 5,
             roughness: 0.1,
             metalness: 0.5,
+            transparent: true,
             side: THREE.DoubleSide
         });
 
@@ -56,8 +67,35 @@ export default class RoofRectAreaLight {
         this.lightPlane.position.y = y;
         this.lightPlane.rotation.x = directionToDown; // 让光朝下（默认朝-z方向）
 
+
         this.scene.add(this.light);
         this.scene.add(this.lightPlane);
+
+    }
+
+    zoomStartAnimation() {
+
+        this._zoomTween = gsap.to(this.light, {
+            intensity: 1,
+            ...this._zoomInOptions,
+        })
+
+        this._zoomTween = gsap.to(this.lightPlane.material, {
+            opacity: 0,
+            ...this._zoomInOptions,
+        })
+    }
+
+    zoomStopAnimation() {
+        this._zoomTween = gsap.to(this.light, {
+            intensity: this.intensity,
+            ...this._zoomOutOptions,
+        })
+        this._zoomTween = gsap.to(this.lightPlane.material, {
+            opacity: 1,
+            ...this._zoomOutOptions,
+        })
+
 
     }
 

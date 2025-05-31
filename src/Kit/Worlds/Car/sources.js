@@ -43,6 +43,16 @@ export default [
         path: '/textures/car/flyLight.png'
     },
     {
+        name: 'glassRoughnessTexture',
+        type: 'texture',
+        path: '/textures/car/glass_roughness.jpg'
+    },
+    {
+        name: 'glassNormalTexture',
+        type: 'texture',
+        path: '/textures/car/glass_normal.png'
+    },
+    {
         name: 'carModel',
         type: 'gltfModel',
         path: '/models/Car/2018_bmw_m5_4.glb'

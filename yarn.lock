@@ -341,6 +341,11 @@ postcss@^8.5.3:
     picocolors "^1.1.1"
     source-map-js "^1.2.1"
 
+postprocessing@^6.37.3:
+  version "6.37.3"
+  resolved "https://registry.npmmirror.com/postprocessing/-/postprocessing-6.37.3.tgz#33d4f287044bb41c84316d1a91eabdb4458b442f"
+  integrity sha512-2FzfZg41Ml/ddvSalLdCz7H53Wmr/ZvK238fauTG1CI97+65BDgo1dNH6AKhAWc5q9ngpyG5EYiXVbNCl2t1iA==
+
 rollup@^4.34.9:
   version "4.41.0"
   resolved "https://registry.npmmirror.com/rollup/-/rollup-4.41.0.tgz#17476835d2967759e3ffebe5823ed15fc4b7d13e"

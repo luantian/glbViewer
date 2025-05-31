@@ -1,4 +1,3 @@
-import gsap from "gsap";
 import ScrollHandler from "../../../Utils/ScrollHandler.js";
 
 
@@ -21,6 +20,7 @@ export default class StateTable {
         this.act = 'StateTableClick'
         this.activeStateIndex = 0;
         this.activeStateColor = 'rgb(255, 146, 69)';
+        this.throttle = 1000;
 
         this._setStateTableStyle();
         this._setStateTable();
@@ -30,24 +30,41 @@ export default class StateTable {
     }
 
     _initScrollHandler() {
-        this.scrollHandler = new ScrollHandler({ throttle: 1000 });
+        this.scrollHandler = new ScrollHandler({ throttle: this.throttle });
         this.scrollHandler.on('up', this._scrollUp.bind(this));
         this.scrollHandler.on('down', this._scrollDown.bind(this));
     }
 
+    onWheelUp(callback) {
+        this.scrollHandler.on('up', () => {
+            callback && callback();
+        });
+    }
+
+    onWheelDown(callback) {
+        this.scrollHandler.on('down', () => {
+            callback && callback();
+        });
+    }
+
+    show() {
+        this.stateTableEl.setAttribute('__hide', '1');
+    }
+
+    hide() {
+        this.stateTableEl.removeAttribute('__hide');
+    }
+
     _scrollUp() {
-        this.logger.info('scrollUp');
         if (this.activeStateIndex === 0 ) {
             this.activeStateIndex = this.stateTables.length - 1
         } else {
             this.activeStateIndex --;
         }
         this._switchState();
-
     }
 
     _scrollDown() {
-        this.logger.info('scrollDown');
         if (this.activeStateIndex < this.stateTables.length - 1 ) {
             this.activeStateIndex ++;
         } else {
@@ -91,7 +108,6 @@ export default class StateTable {
         if (act === this.act) {
             this.activeStateIndex = Number(e.target.dataset.index);
             this._switchState();
-            // this._onSwitchState();
         }
     }
 
@@ -102,10 +118,6 @@ export default class StateTable {
             item.querySelector('.__tableName').removeAttribute('style');
         })
         this._setState();
-    }
-
-    _onSwitchState() {
-
     }
 
     _setState() {
@@ -132,8 +144,13 @@ export default class StateTable {
                 justify-content: center;
                 display: flex;
                 align-items: center;
-                transition: .2s;
+                transition: .6s;
             }
+            
+            .__stateTable-container[__hide] {
+                right: -10%;
+            }
+            
             .__stateTable-container .__stateTable-content {
                 position: relative;
                 height: 100%;
@@ -192,6 +209,8 @@ export default class StateTable {
                 box-shadow: 0 0 0 1px #ff9245;
                 opacity: 0;
             }
+            
+            
         `;
         document.head.appendChild(styleEl);
     }
