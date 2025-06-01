@@ -23,7 +23,7 @@ export default [
         path: '/textures/car/t_startroom_ao.raw.jpg'
     },
     {
-        name: 'startroomLightTexture',
+        name: 'floorMapColor',
         type: 'texture',
         path: '/textures/car/t_startroom_light.raw.jpg'
     },
@@ -42,6 +42,17 @@ export default [
         type: 'texture',
         path: '/textures/car/flyLight.png'
     },
+    {
+        name: 'roadAlphaTexture',
+        type: 'texture',
+        path: '/textures/car/t_saLine.webp'
+    },
+    {
+        name: 'tScarMatcapTexture',
+        type: 'texture',
+        path: '/textures/car/t_scar_matcap.webp'
+    },
+
     {
         name: 'glassRoughnessTexture',
         type: 'texture',

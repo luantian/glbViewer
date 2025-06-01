@@ -80,6 +80,7 @@ export default class Tunnel {
                 uOffset: new THREE.Uniform(0),
                 uTexture: new THREE.Uniform(this.flyLightTexture),
                 uAlpha: new THREE.Uniform(0),
+                fogColor: { value: new THREE.Color(0xffff00) },
             },
             side: THREE.DoubleSide,
             transparent: true,

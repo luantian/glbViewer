@@ -22,7 +22,7 @@ export default class CarWorld extends BaseWorld {
         this.context = context;
 
         this.scene = context.getScene();
-        this.scene.fog = new THREE.FogExp2(0x000000, 0.003);
+        this.scene.fog = new THREE.FogExp2(0xff0000, 0.02);
 
         // 初始化相机与渲染器
         this.camera = new Camera(context);

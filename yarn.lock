@@ -341,11 +341,6 @@ postcss@^8.5.3:
     picocolors "^1.1.1"
     source-map-js "^1.2.1"
 
-postprocessing@^6.37.3:
-  version "6.37.3"
-  resolved "https://registry.npmmirror.com/postprocessing/-/postprocessing-6.37.3.tgz#33d4f287044bb41c84316d1a91eabdb4458b442f"
-  integrity sha512-2FzfZg41Ml/ddvSalLdCz7H53Wmr/ZvK238fauTG1CI97+65BDgo1dNH6AKhAWc5q9ngpyG5EYiXVbNCl2t1iA==
-
 rollup@^4.34.9:
   version "4.41.0"
   resolved "https://registry.npmmirror.com/rollup/-/rollup-4.41.0.tgz#17476835d2967759e3ffebe5823ed15fc4b7d13e"
@@ -384,11 +379,6 @@ stats.js@^0.17.0:
   version "0.17.0"
   resolved "https://registry.npmmirror.com/stats.js/-/stats.js-0.17.0.tgz#b1c3dc46d94498b578b7fd3985b81ace7131cc7d"
   integrity sha512-hNKz8phvYLPEcRkeG1rsGmV5ChMjKDAWU7/OJJdDErPBNChQXxCo3WZurGpnWc6gZhAzEPFad1aVgyOANH1sMw==
-
-three-custom-shader-material@^6.3.5:
-  version "6.3.5"
-  resolved "https://registry.npmmirror.com/three-custom-shader-material/-/three-custom-shader-material-6.3.5.tgz#e1c70f16d3faa9e7231ed4481b401a4514fbbac7"
-  integrity sha512-L9bd3NsN3tJWUUaqDDGe0vFgZdZuLf4JQR87b9IaeZ0FsGLYy2KJhoKw52IrgQ7kS+E3DAGLayYshCCRt/ZUbw==
 
 three@^0.176.0:
   version "0.176.0"
