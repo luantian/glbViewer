@@ -12,24 +12,6 @@ export default class Debug
         }
     }
 
-    getLights(scene) {
-        const lights = [];
-
-        scene.traverse((obj) => {
-            if (obj.isLight) lights.push(obj);
-        });
-        return lights;
-    }
-
-    getCameras(scene) {
-        const cameras = [];
-
-        scene.traverse((obj) => {
-            if (obj.isCamera) cameras.push(obj);
-        });
-        return cameras;
-    }
-
     clear() {
         this.ui.controllers.slice().forEach(controller  => controller.destroy());
         this.ui.folders.slice().forEach(folder => folder.destroy());

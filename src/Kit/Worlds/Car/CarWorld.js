@@ -51,11 +51,11 @@ export default class CarWorld extends BaseWorld {
 
     }
 
-    update() {
-        super.update();
+    tick({ delta, elapsed }) {
         if (this.composer) {
             this.composer.render()
         }
+        super.tick({ delta, elapsed });
     }
 
     _setBloomPass() {

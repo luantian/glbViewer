@@ -30,13 +30,11 @@ export default class Time extends EventEmitter {
     tick() {
         stats.begin();
 
-        if (!this.isRunning) return
-
-
-        this.delta = this.clock.getDelta();
-        this.elapsed = this.clock.elapsedTime
-
-        this.trigger('tick', this.delta, this.elapsed)
+        if (this.isRunning) {
+            this.delta = this.clock.getDelta();
+            this.elapsed = this.clock.elapsedTime;
+            this.trigger('tick', { delta: this.delta, elapsed: this.elapsed })
+        }
 
         stats.end();
 

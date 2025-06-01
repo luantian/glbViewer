@@ -36,6 +36,14 @@ export default class Context extends EventEmitter {
 
         // 插件管理器
         this.pluginManager = new PluginManager(this);
+
+        this.time.on('tick', ({ delta, elapsed }) => {
+            for (const obj of this.updatables) {
+                if (typeof obj.tick === 'function') {
+                    obj.tick({ delta, elapsed });
+                }
+            }
+        });
     }
 
     /**

@@ -1,7 +1,7 @@
 import * as THREE from "three";
 
-import vertexShader from '../shader/tunnel/vertex.glsl'
-import fragmentShader from '../shader/tunnel/fragment.glsl'
+import vertexShader from '../shaders/tunnel/vertex.glsl'
+import fragmentShader from '../shaders/tunnel/fragment.glsl'
 
 
 export default class Tunnel {
@@ -27,10 +27,12 @@ export default class Tunnel {
             this._setDebugger();
         }
 
-        this.time.on('tick', this._tick.bind(this));
+
         this.context.on('Tunnel:rotationSpeed', (speed) => {
             this.speed = speed
         });
+
+        this.context.addUpdatable(this);
 
     }
 
@@ -102,7 +104,7 @@ export default class Tunnel {
 
     }
 
-    _tick(delta) {
+    tick({ delta, elapsed }) {
         if (!this.speed) this.speed = 0;
         this.offset += delta * this.speed * 0.006;
         this.material.uniforms.uTime.value = delta;

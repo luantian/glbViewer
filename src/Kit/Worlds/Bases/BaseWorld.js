@@ -25,8 +25,7 @@ export default class BaseWorld {
         this.setHelper();
 
         this.sizes.on('resize', () => this.resize());
-        this.time.on('tick', () => this.update());
-
+        this.context.addUpdatable(this);
     }
 
     setHelper() {
@@ -47,12 +46,9 @@ export default class BaseWorld {
         this.renderer?.resize?.();
     }
 
-    update() {
-        this.camera?.update?.();
-        for (const obj of this.updatables) {
-            obj.update?.();
-        }
-        this.renderer?.update?.();
+    tick({ delta, elapsed }) {
+        this.camera?.update?.({ delta, elapsed });
+        this.renderer?.update?.({ delta, elapsed });
     }
 
     destroy() {

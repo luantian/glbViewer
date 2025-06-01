@@ -33,9 +33,7 @@ export default class Renderer extends BaseRenderer
         this.context.setRenderer(this);
         this.context.setRendererInstance(this.instance);
 
-
         console.log(this.instance.info);
-
 
     }
 

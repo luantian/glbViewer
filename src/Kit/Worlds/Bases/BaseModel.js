@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import Animation from '../../Core/Animation.js';
+import ConvertMaterial from '../../Utils/MaterialUtils.js';
 
 export default class BaseModel {
     constructor(context, config = {}) {
@@ -89,34 +90,7 @@ export default class BaseModel {
         this.model.position.sub(center);
     }
 
-    /*
-    * 材质转换
-    * */
-    convertPhysicalToStandardMaterial(options = {}) {
-        this.model.traverse((child) => {
-            if (child.isMesh && child.material) {
-                let mat = child.material;
 
-                // 如果是 PhysicalMaterial，就换掉
-                if (mat.isMeshPhysicalMaterial) {
-                    const newMat = new THREE.MeshStandardMaterial({
-                        color: mat.color,
-                        map: mat.map || null,
-                        normalMap: mat.normalMap || null,
-                        metalness: mat.metalness ?? 0.5,
-                        roughness: mat.roughness ?? 0.5,
-                        transparent: mat.transparent,
-                        opacity: mat.opacity,
-                        envMap: options.envMap || mat.envMap || null,
-                        side: mat.side || THREE.FrontSide,
-                    });
-
-                    child.material.dispose(); // 记得释放旧材质
-                    child.material = newMat;
-                }
-            }
-        });
-    }
 
     setAnimation() {
         this.animation = new Animation(this.resource);
@@ -136,9 +110,9 @@ export default class BaseModel {
     }
 
 
-    update() {
+    tick({ delta, elapsed }) {
         if (this.animation) {
-            this.animation.update(this.time.delta);
+            this.animation.update({ delta, elapsed });
         }
     }
 

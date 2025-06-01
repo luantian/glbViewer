@@ -21,7 +21,6 @@ export default class BaseRenderer
 
     resize()
     {
-        this.logger.important('BaseRenderer')
         this.instance.setSize(this.sizes.width, this.sizes.height)
         this.instance.outputColorSpace = THREE.SRGBColorSpace; // 设置为 sRGB 颜色空间
         this.instance.setPixelRatio(this.sizes.pixelRatio)

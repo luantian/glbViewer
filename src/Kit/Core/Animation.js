@@ -54,7 +54,7 @@ export default class Animation {
         })
     }
 
-    update(deltaTime) {
-        this.mixer.update(deltaTime)
+    update(delta, elapsed) {
+        this.mixer.update(delta)
     }
 }

@@ -1,8 +1,8 @@
 import * as THREE from "three";
 import gsap from "gsap";
 import { Reflector } from 'three/examples/jsm/objects/Reflector.js';
-import vertexShader from '../shader/floor/vertex.glsl'
-import fragmentShader from '../shader/floor/fragment.glsl'
+import vertexShader from '../shaders/floor/vertex.glsl'
+import fragmentShader from '../shaders/floor/fragment.glsl'
 
 export default class Floor {
 
@@ -25,7 +25,7 @@ export default class Floor {
         // this._setFloor();
         this._setReflector();
         // this._setReflectorFloor();
-
+        this.context.addUpdatable(this);
 
         if (this.debug.active) {
             this._setDebugger();
@@ -213,6 +213,9 @@ export default class Floor {
         //     duration: 3,
         //     ease: "power2.in",
         // })
+    }
+
+    tick({ delta, elapsed }) {
     }
 
     destroy() {

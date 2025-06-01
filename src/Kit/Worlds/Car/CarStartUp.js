@@ -1,9 +1,10 @@
-import EnvironmentManager from './Environment/EnvironmentManager.js';
+import EnvironmentManager from './environments/EnvironmentManager.js';
 import BaseStartUp from "../Bases/BaseStartUp.js";
 import sources from "./sources.js";
 import UiManager from "./ui/UiManager.js";
 import ModelManager from "./models/ModelManager.js";
-import SceneAnimation1 from "./SceneAnimations/SceneAnimation1.js";
+
+import SceneManager from "./scenes/SceneManager.js";
 
 export default class CarStartUp extends BaseStartUp {
     constructor(context, world) {
@@ -21,19 +22,7 @@ export default class CarStartUp extends BaseStartUp {
 
     onLoad() {
 
-        this.modelManager = new ModelManager(this.context);
-        this.environmentManager = new EnvironmentManager(this.context);
-        this.uiManager = new UiManager(this.context);
-
-        this.context.on('ColorPickerSelect', (color) => {
-            this.modelManager.carModel.onSetCarModelColor(color);
-        });
-
-        this.sceneAnimation1 = new SceneAnimation1(this.context, {
-            uiManager: this.uiManager,
-            modelManager: this.modelManager,
-            environmentManager: this.environmentManager,
-        });
+        new SceneManager(this.context);
 
     }
 
@@ -48,8 +37,6 @@ export default class CarStartUp extends BaseStartUp {
             }
         }
     }
-
-
 
     destroy() {
         this.logger.clear('开始');

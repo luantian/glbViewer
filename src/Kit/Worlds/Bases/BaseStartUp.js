@@ -10,15 +10,20 @@ export default class BaseStartUp {
         this.cnName = '启动器基类';
         this.logger = context.getLogger(`${this.cnName}: ${this.name}`);
         this.logger.important('初始化完成')
+        this.sources = sources;
 
-        this.resources = new Resources(sources);
+        this.init();
+
+    }
+
+    async init() {
+        this.resources = new Resources(this.sources);
+        await this.resources.load();
         this.context.setResources(this.resources)// 公开给系统使用
-
         this._loaded = false;
 
         this.setupResourceListeners();
         this.checkResourceState();
-
     }
 
     setupResourceListeners() {

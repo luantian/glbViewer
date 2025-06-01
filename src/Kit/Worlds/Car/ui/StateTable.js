@@ -5,7 +5,8 @@ export default class StateTable {
     constructor(context) {
 
         this.name = "StateTable";
-        this.cnName = "汽车切换场景"
+        this.cnName = "汽车切换场景";
+        this.context = context;
         this.logger = context.getLogger(`${this.cnName}: ${this.name}`);
 
         this.stateTables = [
@@ -35,18 +36,6 @@ export default class StateTable {
         this.scrollHandler.on('down', this._scrollDown.bind(this));
     }
 
-    onWheelUp(callback) {
-        this.scrollHandler.on('up', () => {
-            callback && callback();
-        });
-    }
-
-    onWheelDown(callback) {
-        this.scrollHandler.on('down', () => {
-            callback && callback();
-        });
-    }
-
     show() {
         this.stateTableEl.setAttribute('__hide', '1');
     }
@@ -62,6 +51,7 @@ export default class StateTable {
             this.activeStateIndex --;
         }
         this._switchState();
+        this.context.trigger('wheel:up', this.activeStateIndex)
     }
 
     _scrollDown() {
@@ -71,6 +61,7 @@ export default class StateTable {
             this.activeStateIndex = 0;
         }
         this._switchState();
+        this.context.trigger('wheel:down', this.activeStateIndex)
     }
 
     _setStateTable() {
